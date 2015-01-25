@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="320" minHeight="240" initialize="init()">
+		<fx:Script>		
+		{			
+			[Bindable] 
+			public var host:String = null;
+			
+			[Bindable] 
+			public var application:String = "redtube";
+			
+			[Bindable] 
+			public var stream:String = null;
+			
+			
+			private function init():void{
+				Security.allowDomain("*");
+				host=ExternalInterface.call("window.location.host.toString");
+				var myPath:QueryString = new QueryString(ExternalInterface.call("window.location.toString"));
+				stream=myPath.parameters.key;
+			}
+			
+		}
+	</fx:Script>
+	<s:VideoDisplay id="playerDisplay" x="0" y="0" width="320" height="240" opaqueBackground="#000000">
+		<s:source>
+			<s:DynamicStreamingVideoSource id="source" host="rtmp://{host}/{application}/"
+										   streamType="live">
+				<s:DynamicStreamingVideoItem streamName="{stream}"/>
+			</s:DynamicStreamingVideoSource>
+		</s:source>
+	</s:VideoDisplay>
+</s:Application>
